@@ -1,21 +1,20 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
-	"os"
 )
 
 func main() {
-	port := "8080"
+	// Parse port from command-line parameters
+	port := flag.String("port", "8080", "HTTP Port to listen on")
+	flag.Parse()
 
-	if len(os.Getenv("PORT")) > 0 {
-		port = os.Getenv("PORT")
-	}
-
-	log.Println("Starting Server on", port)
+	// Start our Server
+	log.Println("Starting Server on", *port)
 	http.HandleFunc("/", all)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Fatal(http.ListenAndServe(":"+*port, nil))
 }
 
 func all(w http.ResponseWriter, r *http.Request) {
